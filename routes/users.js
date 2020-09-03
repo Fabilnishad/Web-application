@@ -7,14 +7,6 @@ const userModel = require("../models/user")
 
 
 
-router.use(session({
-    secret: "fabil",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 1000*60*60*24
-    }
-}))
 
 const redirect_Dashboard = (req,res,next)=>{
     if(req.session.userEmail){
@@ -66,7 +58,7 @@ router.post("/signup",(req,res)=>{
 })
 
 
-router.get("/login",redirect_Dashboard, (req,res) => {
+router.get("/",redirect_Dashboard, (req,res) => {
     res.render("login");
 
 }
@@ -102,7 +94,7 @@ router.get("/secret",protectHome, (req,res) => {
 })
 
 router.get("/logout",(req,res) =>{
-    res.clearCookie("connect.sid");
+    res.clearCookie("userscookie");
     req.session.destroy();
     res.redirect("/login");
 });

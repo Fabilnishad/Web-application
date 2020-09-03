@@ -4,16 +4,13 @@ const session = require("express-session");
 const userModel = require("../models/user")
 
 
-
-router.use(session({
-    secret: "fabil",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 1000*60*60*24
+const protectScret = (req,res,next)=>{
+    if(req.session.email){
+        res.redirect("/admin/secret")
+    }else{
+        next();
     }
-
-}))
+}
 
 
 const protectPage = (req,res,next)=>{
@@ -29,10 +26,10 @@ const admin = {
     email:"fabil@gmail.com",
     password:"123"
 }
-router.get("/admin",(req,res)=>{
-    res.redirect("/admin/login")
-})
-router.get("/login",(req,res)=>{
+// router.get("/admin",protectScret,(req,res)=>{
+//     res.redirect("/admin/login")
+// })
+router.get("/",protectScret,(req,res)=>{
     res.render("adminlog")
 })
 
@@ -102,8 +99,10 @@ router.post("/delete",(req,res)=>{
     })
 })
 
-router.get("/logout",(req,res)=>{
-    res.render("adminlog")
+router.post("/logout",(req,res)=>{
+    res.clearCookie("admincookie");
+    req.session.destroy();
+    res.redirect("/admin");
 })
 
 module.exports = router;

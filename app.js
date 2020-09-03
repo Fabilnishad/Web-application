@@ -20,6 +20,28 @@ mongoose.connect("mongodb://localhost:27017/blog_app",{useUnifiedTopology:true,u
 })
 
 
+app.use("/admin",session({
+    name: "admincookie",
+    secret: "fabil",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000*60*60*24
+    }
+}))
+
+app.use("/",session({
+    name: "usercookie",
+    secret: "fabil",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000*60*60*24
+    }
+}))
+
+
+
 app.use(nocache());
 app.use(express.static(path.join("public")))
 app.use(express.urlencoded({ extended:false}));
