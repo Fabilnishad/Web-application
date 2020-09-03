@@ -29,7 +29,9 @@ const admin = {
     email:"fabil@gmail.com",
     password:"123"
 }
-
+router.get("/admin",(req,res)=>{
+    res.redirect("/admin/login")
+})
 router.get("/login",(req,res)=>{
     res.render("adminlog")
 })
@@ -63,24 +65,26 @@ router.get("/edit",(req,res)=>{
 
 router.post("/edit",(req,res)=>{
     const email = req.body.email;
+    
     userModel.find({email:email}).lean().exec((err,data)=>{
-        if(err){
+        if(err){editSave
             throw err;
         }else{
-            res.render("edit",{data:data})
+            res.render("edit",{user:data})
         }
     })
 })
 
 router.post("/editSave",(req,res)=>{
-    const email = req.body.email;
+    const id = req.body.id;
     
 
     const data={
+        email:req.body.email,
         name:req.body.name,
         password:req.body.password
     }
-    userModel.updateOne({email:email},{$set:{password:data.password,name:data.name}},(err,docs)=>{
+    userModel.updateOne({id:id},{$set:{email:data.email,password:data.password,name:data.name}},(err,docs)=>{
         if(err) throw err;
         res.redirect("/admin/secret")
     })
@@ -96,6 +100,10 @@ router.post("/delete",(req,res)=>{
             res.redirect("/admin/secret")
         }
     })
+})
+
+router.get("/logout",(req,res)=>{
+    res.render("adminlog")
 })
 
 module.exports = router;

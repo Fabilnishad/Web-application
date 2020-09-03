@@ -38,18 +38,31 @@ router.get("/signup",redirect_Dashboard,(req,res)=>{
 })
 
 router.post("/signup",(req,res)=>{
-    const {name,email,password}=req.body;
+    // const {id,name,email,password}=req.body;
 
-    var user = new userModel({
-        name:name,
-        email:email,
-        password:password,
-    })
-    console.log(name);
+    // var user = new userModel({
+    //     id:id,
+    //     name:name,
+    //     email:email,
+    //     password:password,
+    // })
+    // console.log(name);
     
+    // user.save();
+    // res.redirect("/login")
+    // console.log(user);
+
+    const newUser = {
+        id: Date.now().toString(),
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+    }
+    // Users.push(newUser);
+    var user = new userModel(newUser);
     user.save();
-    res.redirect("/login")
-    console.log("data is saved");
+    res.redirect('/login');
+    console.log(user);
 })
 
 
